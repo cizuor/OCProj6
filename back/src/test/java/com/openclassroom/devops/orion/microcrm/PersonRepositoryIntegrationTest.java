@@ -8,6 +8,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.openclassroom.devops.orion.microcrm.model.Person;
+import com.openclassroom.devops.orion.microcrm.repository.PersonRepository;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest

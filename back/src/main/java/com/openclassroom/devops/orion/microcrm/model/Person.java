@@ -1,4 +1,4 @@
-package com.openclassroom.devops.orion.microcrm;
+package com.openclassroom.devops.orion.microcrm.model;
 
 import java.util.Date;
 import java.util.List;

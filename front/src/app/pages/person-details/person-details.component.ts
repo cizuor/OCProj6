@@ -2,8 +2,8 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Person, PersonService } from '../person.service';
-import { Organization, OrganizationService } from '../organization.service';
+import { Person, PersonService } from '../../core/service/person.service';
+import { Organization, OrganizationService } from '../../core/service/organization.service';
 
 @Component({
   selector: 'app-person-details',

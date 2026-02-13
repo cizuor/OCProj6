@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Person } from './person.service';
 import { HttpClient } from '@angular/common/http';
-import { API_BASE_URL } from './config';
+import { API_BASE_URL } from '../../config';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {

@@ -1,8 +1,8 @@
 import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Person, PersonService } from '../person.service';
-import { Organization, OrganizationService } from '../organization.service';
+import { Person, PersonService } from '../../core/service/person.service';
+import { Organization, OrganizationService } from '../../core/service/organization.service';
 
 @Component({
   selector: 'app-main-dashboard',

@@ -5,6 +5,11 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.openclassroom.devops.orion.microcrm.model.Organization;
+import com.openclassroom.devops.orion.microcrm.model.Person;
+import com.openclassroom.devops.orion.microcrm.repository.OrganizationRepository;
+import com.openclassroom.devops.orion.microcrm.repository.PersonRepository;
+
 import ro.polak.springboot.datafixtures.DataFixture;
 import ro.polak.springboot.datafixtures.DataFixtureSet;
 
