@@ -67,7 +67,7 @@ jobs:
       # analyse uniquement pour la master 
       - name: SonarCloud Scan
         if: github.ref == 'refs/heads/master'
-        uses: SonarSource/sonarcloud-scan-action@v3.1.0
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
