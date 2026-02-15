@@ -10,6 +10,7 @@ module.exports = function (config) {
       require("karma-chrome-launcher"),
       require("karma-jasmine-html-reporter"),
       require("karma-coverage"),
+      require("karma-junit-reporter"), // gestion des sorti XML
       require("@angular-devkit/build-angular/plugins/karma"),
     ],
     client: {
@@ -21,15 +22,22 @@ module.exports = function (config) {
       },
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
+    junitReporter: {
+      outputDir: 'reports', // Dossier de sortie
+      outputFile: 'test-results.xml', // Nom du fichier
+      useBrowserName: false // <--- INDISPENSABLE pour que le chemin soit fixe
+    },
     jasmineHtmlReporter: {
       suppressAll: true, // removes the duplicated traces
     },
     coverageReporter: {
       dir: require("path").join(__dirname, "./coverage/microcrm"),
       subdir: ".",
-      reporters: [{ type: "html" }, { type: "text-summary" }],
+      reporters: [{ type: "html" }, { type: "text-summary" },
+        { type: "lcovonly" } // pour sonarqube
+      ],
     },
-    reporters: ["progress", "kjhtml"],
+    reporters: ["progress", "kjhtml", "junit", "coverage"],
     browsers: ["ChromeHeadlessNoSandbox", "ChromeHeadless", "Chrome"],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {

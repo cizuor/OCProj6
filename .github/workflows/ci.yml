@@ -1,0 +1,162 @@
+name: CI/CD Pipeline Proj6 # nom qui apparait dans l'onglet actions de github
+
+
+# déclencheur , chaque pull ou push déclenche les test
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+# parametrage
+env:
+  JAVA_VERSION: '17'
+  NODE_VERSION: '20'
+  TEST_RESULTS_DIR: test-results
+
+# permission necessaire pour le docker
+permissions:
+  contents: write
+  packages: write
+  checks: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  build-and-test:
+    name: Run Unit Tests  # nom du job visible dans l'interface.
+    runs-on: ubuntu-latest # demande a github une machine virtuel ubuntu
+
+    steps:
+      # Récupération du code
+      - name: Checkout code   # nom d'etape
+        uses: actions/checkout@v4  # commande copy code sur la machine virtuelle github
+        with:
+          fetch-depth: 0
+        
+
+      # Installation de Java 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4  # commande installation Java 
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'gradle' # Gestion automatique du cache pour accélérer les builds
+
+      # Installation de Node.js 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4 # commande installation Node 
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm' # Gestion automatique du cache NPM
+
+      # Exécution des script de test 
+      - name: Run backend Test Script
+        run: |
+          cd back
+          chmod +x run_tests_java.sh
+          ./run_tests_java.sh
+
+      - name: Run frontend Test Script
+        run: |
+          cd front
+          chmod +x run_tests_angular.sh
+          ./run_tests_angular.sh
+       
+      #  Analyse SonarQube
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-scan-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+      # Publication du rapport de test (Intégration au workflow)
+      # Cette action lit les fichiers XML dans test-results/ et crée un joli résumé
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4 # rend les resultat des rapport visible
+        if: always() # publie le rapport même si les tests échouent
+        with:
+          report_paths: '**/${{ env.TEST_RESULTS_DIR }}/*.xml' # lieu on sont les resultat des test
+          check_name: 'Unit Test Results'
+
+      # Archivage des rapports (Optionnel, pour téléchargement manuel)
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Unit Test Results-reports
+          path: |
+            back/${{ env.TEST_RESULTS_DIR }}/*.xml
+            front/${{ env.TEST_RESULTS_DIR }}/*.xml
+
+  # release : 
+  #   name: Semantic Release
+  #   needs: test
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+  #     new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # pour obtenir tout l'historique
+  #     
+  #     - name: Semantic Release
+  #       id: semantic
+  #       uses: cycjimmy/semantic-release-action@v4 #install node et lance semantic-release
+  #       with: # instal les plugin utile pour nomer les version dans le code
+  #         extra_plugins: |
+  #           @semantic-release/git
+  #           @semantic-release/npm
+  #           @google/semantic-release-replace-plugin
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  #build:
+  #  name: Build and Push Docker Image
+  #  needs: release # se lance après les test s'il on réussi 
+  #  runs-on: ubuntu-latest
+  #  # on recré les variable job car c'est un nouveau job
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@v4
+
+  #    - name: Set Image Name
+  #      run: |
+  #        if [ -f "build.gradle" ]; then
+  #          echo "IMAGE_NAME=workshop-organizer" >> $GITHUB_ENV
+  #        elif [ -f "package.json" ]; then
+  #          echo "IMAGE_NAME=olympic-tracker" >> $GITHUB_ENV
+  #        fi
+#
+  #    # log de connexion    
+  #    - name: Log in to GHCR  # GitHub Container Registry
+  #      uses: docker/login-action@v3
+  #      with: # s'identifie sur ghcr.io grace au GITHUB_TOKEN
+  #        registry: ghcr.io
+  #        username: ${{ github.actor }}
+  #        password: ${{ secrets.GITHUB_TOKEN }}
+#
+  #    # crée le tag
+  #    - name: Extract Docker metadata
+  #      id: meta
+  #      uses: docker/metadata-action@v5
+  #      with: # github.ref_name = nom de la branche , github.sha = identifiant du commit 
+  #        images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+  #        tags: |
+  #          type=raw,value=${{ github.ref_name }}-${{ github.sha }}
+  #          type=raw,value=latest
+  #          type=raw,value=${{ needs.release.outputs.new_release_version }},enable=${{ needs.release.outputs.new_release_published == 'true' }}
+#
+  #    # crée l'image et la pousse    
+  #    - name: Build and push Docker image
+  #      uses: docker/build-push-action@v5
+  #      with: # le context prend le dockerfile a la racine  et le push true l'envoie une foi construite
+  #        context: .
+  #        push: true
+  #        tags: ${{ steps.meta.outputs.tags }}
+  #        labels: ${{ steps.meta.outputs.labels }}

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome Headless 145.0.0.0 (Windows 10)" package="" timestamp="2026-02-14T08:54:44" id="0" hostname="pierre" tests="8" errors="0" failures="0" time="0.084">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.0.0 Safari/537.36"/>
+  </properties>
+  <testcase name="IndividualDetailsComponent should create" time="0.06" classname="IndividualDetailsComponent"/>
+  <testcase name="IndividualDetailsComponent should create" time="0.009" classname="IndividualDetailsComponent"/>
+  <testcase name="OrganizationService should be created" time="0.001" classname="OrganizationService"/>
+  <testcase name="AppComponent should render title" time="0.003" classname="AppComponent"/>
+  <testcase name="AppComponent should create the app" time="0.002" classname="AppComponent"/>
+  <testcase name="AppComponent should have the 'MicroCRM' title" time="0.001" classname="AppComponent"/>
+  <testcase name="MainDashboardComponent should create" time="0.007" classname="MainDashboardComponent"/>
+  <testcase name="PersonService should be created" time="0.001" classname="PersonService"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

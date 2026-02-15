@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.openclassroom.devops.orion.microcrm.MicroCRMApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-14T07:25:07" hostname="PIERRE" time="0.263">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.openclassroom.devops.orion.microcrm.MicroCRMApplicationTests" time="0.263"/>
+  <system-out><![CDATA[08:25:04.204 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.openclassroom.devops.orion.microcrm.MicroCRMApplicationTests]: MicroCRMApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+08:25:04.265 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.openclassroom.devops.orion.microcrm.MicroCRMApplication for test class com.openclassroom.devops.orion.microcrm.MicroCRMApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2026-02-14T08:25:04.534+01:00  INFO 23204 --- [microcrm] [    Test worker] c.o.d.o.m.MicroCRMApplicationTests       : Starting MicroCRMApplicationTests using Java 21.0.9 with PID 23204 (started by cizuo in C:\Users\cizuo\Desktop\OC\Proj6\P7-FSJA-main\back)
+2026-02-14T08:25:04.535+01:00  INFO 23204 --- [microcrm] [    Test worker] c.o.d.o.m.MicroCRMApplicationTests       : No active profile set, falling back to 1 default profile: "default"
+2026-02-14T08:25:04.916+01:00  INFO 23204 --- [microcrm] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-14T08:25:04.960+01:00  INFO 23204 --- [microcrm] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 2 JPA repository interfaces.
+2026-02-14T08:25:05.257+01:00  INFO 23204 --- [microcrm] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-14T08:25:05.428+01:00  INFO 23204 --- [microcrm] [    Test worker] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+2026-02-14T08:25:05.429+01:00  INFO 23204 --- [microcrm] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@6ddd1c51
+2026-02-14T08:25:05.430+01:00  INFO 23204 --- [microcrm] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-14T08:25:05.464+01:00  INFO 23204 --- [microcrm] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-14T08:25:05.514+01:00  INFO 23204 --- [microcrm] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-02-14T08:25:05.536+01:00  INFO 23204 --- [microcrm] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-02-14T08:25:05.686+01:00  INFO 23204 --- [microcrm] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-14T08:25:06.161+01:00  INFO 23204 --- [microcrm] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-14T08:25:06.178+01:00  INFO 23204 --- [microcrm] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-14T08:25:06.486+01:00  WARN 23204 --- [microcrm] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-14T08:25:07.075+01:00  INFO 23204 --- [microcrm] [    Test worker] r.p.s.d.DataFixtureLoaderService         : Applied InitialDataFixture fixture of set DICTIONARY in 0,024 seconds
+2026-02-14T08:25:07.079+01:00  INFO 23204 --- [microcrm] [    Test worker] c.o.d.o.m.MicroCRMApplicationTests       : Started MicroCRMApplicationTests in 2.691 seconds (process running for 3.4)
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\cizuo\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.13\979ce25f7d3096a2e82214ba7dc972a05ce7a171\byte-buddy-agent-1.14.13.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
