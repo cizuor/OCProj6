@@ -49,6 +49,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm' # Gestion automatique du cache NPM
+          cache-dependency-path: front/package-lock.json
 
       # Exécution des script de test 
       - name: Run backend Test Script
