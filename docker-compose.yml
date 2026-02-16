@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: back  # pour ciblé la machine back du dockerfile
+    container_name: microcrm-back
+    environment:
+      - SERVER_PORT=4200
+    ports:
+      - "8080:4200"
+    networks:
+      - app-network
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: front  # pour ciblé la machine front du dockerfile
+    container_name: microcrm-front
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

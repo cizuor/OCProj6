@@ -1,6 +1,11 @@
-* {
+:80 {
 	root * /app/front
 	encode gzip
-	try_files {path} /index.html
 	file_server
+	
+	# URL commence par /api/, on l'envoie au service "backend"
+	reverse_proxy /api/* backend:4200
+	
+	# On met ça en dernier pour que le reverse_proxy passe avant
+	try_files {path} /index.html
 }
