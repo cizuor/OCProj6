@@ -1,9 +1,11 @@
 services:
   backend:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-      target: back  # pour ciblé la machine back du dockerfile
+    #build: 
+      #context: .
+      #dockerfile: Dockerfile
+      #target: back  # pour ciblé la machine back du dockerfile
+    image: ghcr.io/cizuor/ocproj6-backend:latest
+    pull_policy: always  
     container_name: microcrm-back
     environment:
       - SERVER_PORT=4200
@@ -13,10 +15,12 @@ services:
       - app-network
 
   frontend:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-      target: front  # pour ciblé la machine front du dockerfile
+    #build: 
+    #  context: .
+    #  dockerfile: Dockerfile
+    #  target: front  # pour ciblé la machine front du dockerfile
+    image: ghcr.io/cizuor/ocproj6-frontend:latest
+    pull_policy: always  
     container_name: microcrm-front
     ports:
       - "80:80"
