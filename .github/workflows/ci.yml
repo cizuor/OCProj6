@@ -138,6 +138,10 @@ jobs:
           SPRING_DATASOURCE_USERNAME: workshops_user
           SPRING_DATASOURCE_PASSWORD: oc2024
 
+      - name: Show Backend Logs (if failure)
+        if: failure()
+        run: cat back/backend.log
+        
       - name: Cypress Run
         uses: cypress-io/github-action@v6
         with:
