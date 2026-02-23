@@ -98,22 +98,6 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
-    services:
-      # Service de base de données pour les tests E2E
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: workshops_user
-          POSTGRES_PASSWORD: oc2024
-          POSTGRES_DB: workshopsdb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -130,13 +114,7 @@ jobs:
           cd back
           chmod +x gradlew
           ./gradlew build -x test
-          ls -l build/libs/
           java -jar build/libs/*.jar --server.port=8080 > backend.log 2>&1 &
-        env:
-          # On configure le back pour qu'il parle à la BDD du service ci-dessus
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/workshopsdb
-          SPRING_DATASOURCE_USERNAME: workshops_user
-          SPRING_DATASOURCE_PASSWORD: oc2024
 
       - name: Cypress Run
         uses: cypress-io/github-action@v6
@@ -149,7 +127,7 @@ jobs:
         env:
           # Évite les problèmes de mémoire avec Angular
           NODE_OPTIONS: "--max_old_space_size=4096"
-          
+
       - name: Show Backend Logs (if failure)
         if: failure()
         run: cat back/backend.log
