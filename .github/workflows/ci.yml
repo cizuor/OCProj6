@@ -141,14 +141,14 @@ jobs:
       - name: Show Backend Logs (if failure)
         if: failure()
         run: cat back/backend.log
-        
+
       - name: Cypress Run
         uses: cypress-io/github-action@v6
         with:
           working-directory: front
           start: npm start
           wait-on: 'http://localhost:8080, http://localhost:4200' # attend que le backend et le front soit prêt
-          wait-on-timeout: 120000 # timeout de 2 minutes pour attendre le backend
+          wait-on-timeout: 120 # timeout de 2 minutes pour attendre le backend
           browser: chrome
         env:
           # Évite les problèmes de mémoire avec Angular
