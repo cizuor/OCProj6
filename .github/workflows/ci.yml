@@ -130,7 +130,8 @@ jobs:
           cd back
           chmod +x gradlew
           ./gradlew build -x test
-          java -jar build/libs/*.jar --server.port=8080 &
+          ls -l build/libs/
+          java -jar build/libs/*.jar --server.port=8080 > backend.log 2>&1 &
         env:
           # On configure le back pour qu'il parle à la BDD du service ci-dessus
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/workshopsdb
