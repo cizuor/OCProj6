@@ -138,10 +138,6 @@ jobs:
           SPRING_DATASOURCE_USERNAME: workshops_user
           SPRING_DATASOURCE_PASSWORD: oc2024
 
-      - name: Show Backend Logs (if failure)
-        if: failure()
-        run: cat back/backend.log
-
       - name: Cypress Run
         uses: cypress-io/github-action@v6
         with:
@@ -153,6 +149,10 @@ jobs:
         env:
           # Évite les problèmes de mémoire avec Angular
           NODE_OPTIONS: "--max_old_space_size=4096"
+          
+      - name: Show Backend Logs (if failure)
+        if: failure()
+        run: cat back/backend.log
 
 
 
