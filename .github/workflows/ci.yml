@@ -133,36 +133,35 @@ jobs:
         run: cat back/backend.log
 
 
-
-  # release : 
-  #   name: Semantic Release
-  #   needs: test
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     new_release_version: ${{ steps.semantic.outputs.new_release_version }}
-  #     new_release_published: ${{ steps.semantic.outputs.new_release_published }}
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0  # pour obtenir tout l'historique
-  #     
-  #     - name: Semantic Release
-  #       id: semantic
-  #       uses: cycjimmy/semantic-release-action@v4 #install node et lance semantic-release
-  #       with: # instal les plugin utile pour nomer les version dans le code
-  #         extra_plugins: |
-  #           @semantic-release/git
-  #           @semantic-release/npm
-  #           @google/semantic-release-replace-plugin
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release : 
+    name: Semantic Release
+    needs: e2e-tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    outputs:
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # pour obtenir tout l'historique
+      
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4 #install node et lance semantic-release
+        with: # instal les plugin utile pour nomer les version dans le code
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/npm
+            @google/semantic-release-replace-plugin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   build:
     name: Build and Push Docker Image backend
-    needs: e2e-tests # se lance après les test s'il on réussi 
+    needs: release # se lance après les test s'il on réussi 
     runs-on: ubuntu-latest
     # on recré les variable job car c'est un nouveau job
     steps:
@@ -185,7 +184,8 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/ocproj6-backend
           tags: |
             type=raw,value=${{ github.ref_name }}-${{ github.sha }}
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
+            type=raw,value=${{ needs.release.outputs.new_release_version }},enable=${{ needs.release.outputs.new_release_published == 'true' }}
 
       # crée l'image et la pousse    
       - name: Build and push Docker image backend
@@ -207,7 +207,8 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/ocproj6-frontend
           tags: |
             type=raw,value=${{ github.ref_name }}-${{ github.sha }}
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
+            type=raw,value=${{ needs.release.outputs.new_release_version }},enable=${{ needs.release.outputs.new_release_published == 'true' }}
 
       # crée l'image et la pousse    
       - name: Build and push Docker image frontend
