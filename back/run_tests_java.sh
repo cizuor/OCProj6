@@ -19,18 +19,22 @@ if [ ! -x "./gradlew" ]; then
 fi
 
 # execution des test
-./gradlew clean test
+./gradlew clean test jacocoTestReport
 
 # on stoque le retour de la commande dans exit code
 EXIT_CODE=$?
 
 if [ -d "build/test-results/test" ]; then
     # copie des raport dans le dossier RESULT_DIR
-    echo " Copie des rapports JUnit XML..."
     cp build/test-results/test/*.xml "$RESULT_DIR/" 
 else
     echo "Aucun rapport XML trouvé. Les tests java ont peut-être échoué."
     EXIT_CODE=1
+fi
+
+if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
+    # copie du raport de couverture jacoco
+    cp build/reports/jacoco/test/jacocoTestReport.xml "$RESULT_DIR/"
 fi
 
 
