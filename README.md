@@ -153,3 +153,73 @@ docker run -it --rm -p 8080:8080 -p 80:80 -p 443:443 orion-microcrm-standalone:l
 ```
 
 L'application sera disponible sur https://localhost et l'API sur http://localhost:8080.
+
+
+
+
+# MicroCRM - Application Full-Stack Industrialisée
+
+## 📝 Présentation
+**MicroCRM** est une solution de gestion de la relation client (CRM) permettant de piloter des personnes et des organisations. Ce projet a été conçu dans une démarche d'industrialisation logicielle poussée, incluant une automatisation complète du cycle de vie du produit.
+
+## 🏗️ Architecture Technique
+L'application repose sur une architecture **Monorepo** moderne :
+
+- **Backend** : Java 17, Spring Boot 3.2.5, Gradle 8.7.
+- **Frontend** : Angular 14, TypeScript.
+- **Base de données** : PostgreSQL 13 (future) et HSQLDB (Tests/CI).
+- **Proxy Inverse** : Caddy Server (gestion du routage et des fichiers statiques).
+- **Registre** : GitHub Container Registry (GHCR).
+
+---
+
+## 🚀 Installation et Lancement Rapide
+
+### Prérequis
+- Docker Desktop (activé avec le moteur WSL 2 sur Windows).
+- Un accès réseau pour récupérer les images sur GHCR.
+
+### Lancement via Docker Compose
+Pour déployer l'application complète sans avoir besoin de compiler le code source localement :
+
+```bash
+# 1. Récupérer les dernières images certifiées par le pipeline CI
+docker compose pull
+
+# 2. Lancer l'application et sa base de données en arrière-plan
+docker compose up -d
+
+
+```
+
+Interface Web : http://localhost (Port 80)
+API Backend : http://localhost/api (via le Reverse Proxy Caddy)
+
+
+
+## 🛠️ Pipeline CI/CD (GitHub Actions)
+Le workflow `.github/workflows/ci.yml` orchestre l'intégration continue de manière robuste :
+
+*   **Unit Tests** : Exécution des tests JUnit (Back) et Jasmine (Front) avec mise en cache des dépendances.
+*   **Quality Gate** : Analyse statique complète via **SonarCloud** (Sécurité, Bugs, Dette technique).
+*   **E2E Tests** : Validation fonctionnelle via **Cypress** sur l'application assemblée (Back + Front + DB).
+*   **Semantic Release** : Calcul automatique du numéro de version et génération du Changelog GitHub.
+*   **Docker Build & Push** : Construction d'images multi-stage optimisées et publication sur **GHCR** avec tags sémantiques.
+
+## 📊 Monitoring (Stack ELK)
+Une stack de surveillance (Elasticsearch, Logstash, Kibana) est intégrée pour centraliser les logs applicatifs.
+
+### Lancer le monitoring
+```bash
+docker compose -f docker-compose.yml -f docker-compose.elk.yml up -d
+```
+
+*   **Kibana Dashboard** : [http://localhost:5601](http://localhost:5601)
+*   **Métriques suivies** : Répartition des erreurs, volume de logs, fréquence des événements.
+
+## 🔒 Sécurité et Qualité
+
+*   **Analyse SonarSource** : Suivi rigoureux des vulnérabilités et des "Code Smells".
+*   **Subresource Integrity (SRI)** : Protection contre les attaques de type *Supply Chain* sur les bibliothèques externes.
+*   **Isolation Réseau** : Séparation logicielle entre le réseau public (Reverse Proxy) et le réseau de données (Base de données isolée).
+*   **Versioning Immuable** : Chaque déploiement est lié à un tag Docker précis permettant un rollback immédiat.
