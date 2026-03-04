@@ -27,6 +27,33 @@ services:
       - elasticsearch
     networks:
       - app-network
+  
+  kibana-setup:
+    image: curlimages/curl:latest
+    container_name: kibana-setup
+    volumes:
+      - ./misc/elk/kibana/export.ndjson:/tmp/export.ndjson
+    networks:
+      - app-network
+    depends_on:
+      kibana:
+        condition: service_healthy
+    # Ce script attend que Kibana réponde, puis importe le fichier
+    entrypoint: 
+    - sh
+    - -c
+    - |
+      echo "Attente de la disponibilité de Kibana..."
+      # On attend que l'API de statut renvoie un code 200
+      until [ "$$(curl -s -o /dev/null -w '%{http_code}' http://kibana:5601/api/status)" -eq 200 ]; do
+        echo "Kibana n'est pas encore prêt (503/404)... attente 5s"
+        sleep 5
+      done
+      echo "Kibana est prêt. Importation du dashboard..."
+      # La commande curl sur une seule ligne pour éviter les erreurs de parsing
+      curl -X POST "http://kibana:5601/api/saved_objects/_import?createNewCopies=true" -H "kbn-xsrf: true" --form "file=@/tmp/export.ndjson"
+      echo -e "\nImportation terminée."
+
 
   # 3. Kibana (L'interface graphique)
   kibana:
@@ -40,6 +67,11 @@ services:
       - elasticsearch
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 # On utilise le MEME réseau que ton application
 networks:

@@ -206,12 +206,34 @@ Le workflow `.github/workflows/ci.yml` orchestre l'intégration continue de mani
 *   **Semantic Release** : Calcul automatique du numéro de version et génération du Changelog GitHub.
 *   **Docker Build & Push** : Construction d'images multi-stage optimisées et publication sur **GHCR** avec tags sémantiques.
 
+### ⚙️ CI/CD – Variables et secrets requis
+
+Pour rendre le pipeline opérationnel, les configurations suivantes sont indispensables :
+
+#### 1. Secrets GitHub
+Ajoutez le secret suivant pour permettre l'analyse SonarCloud :
+**Chemin :** `Settings` ➔ `Secrets and variables` ➔ `Actions` ➔ `New repository secret`
+
+| Nom du Secret | Description |
+| **SONAR_TOKEN** | Jeton d'authentification (obligatoire) à générer sur [SonarCloud.io](https://sonarcloud.io). |
+
+#### 2. Configuration SonarCloud (`sonar-project.properties`)
+Assurez-vous que le fichier `sonar-project.properties` à la racine du projet contient les bonnes références à votre compte SonarCloud :
+
+#### 3. Permissions du Workflow
+Pour permettre la publication des rapports de tests et des images Docker, configurez les permissions :
+Chemin : Settings ➔ Actions ➔ General ➔ section Workflow permissions
+
+    Cochez : Read and write permissions.
+
+
+
 ## 📊 Monitoring (Stack ELK)
 Une stack de surveillance (Elasticsearch, Logstash, Kibana) est intégrée pour centraliser les logs applicatifs.
 
 ### Lancer le monitoring
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.elk.yml up -d
+docker compose -f docker-compose.yml -f docker-compose-elk.yml up -d
 ```
 
 *   **Kibana Dashboard** : [http://localhost:5601](http://localhost:5601)

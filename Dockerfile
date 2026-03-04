@@ -1,4 +1,4 @@
-FROM node as front-build
+FROM node AS front-build
 
 COPY ./front /src
 
@@ -7,7 +7,7 @@ WORKDIR /src
 RUN npm ci \
     && npx @angular/cli build --optimization
 
-FROM gradle:jdk17 as back-build
+FROM gradle:jdk17 AS back-build
 
 COPY ./back /src
 
@@ -16,7 +16,7 @@ WORKDIR /src
 RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
-FROM alpine:3.19 as front
+FROM alpine:3.19 AS front
 
 COPY --from=front-build /src/dist/microcrm/browser /app/front
 COPY misc/docker/Caddyfile /app/Caddyfile
@@ -30,7 +30,7 @@ EXPOSE 443
 
 CMD ["/usr/sbin/caddy", "run"]
 
-FROM alpine:3.19 as back
+FROM alpine:3.19 AS back
 
 COPY --from=back-build /src/build/libs/microcrm-*.jar /app/back/app.jar
 
@@ -42,7 +42,7 @@ EXPOSE 4200
 
 CMD ["java", "-jar",  "/app/back/app.jar"]
 
-FROM alpine:3.19 as standalone
+FROM alpine:3.19 AS standalone
 
 COPY --from=front / /
 COPY --from=back / /
